@@ -1,0 +1,10 @@
+snapshots:
+    - name: dim_bookings
+      relation: ref('bookings')
+      config:
+        schema: gold
+        database: AIRBNB
+        unique_key: BOOKING_ID
+        strategy: timestamp
+        updated_at: CREATED_AT
+        dbt_valid_to_current: "to_date('9999-12-31')"
