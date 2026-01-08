@@ -10,10 +10,8 @@ The pipeline processes Airbnb listings, bookings, and hosts data through a medal
 ### Architecture Diagram
 
 The project follows a **Medallion Architecture Pattern** with the following data flow:
+<img width="2816" height="1536" alt="Gemini_Generated_Image_cd3to6cd3to6cd3t" src="https://github.com/user-attachments/assets/4070c176-a2f7-4a86-be20-de7981fdb98c" />
 
-```
-AWS S3 Source → STAGING Layer → BRONZE Layer → SILVER Layer → GOLD Layer → Star Schema
-```
 
 **Key Components:**
 
