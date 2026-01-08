@@ -8,3 +8,31 @@ wheels/
 
 # Virtual environments
 .venv
+venv/
+env/
+ENV/
+
+# dbt cache and generated files
+target/
+dbt_packages/
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+
+# Lock files (optional - uncomment if you want to ignore)
+# uv.lock
+# poetry.lock
