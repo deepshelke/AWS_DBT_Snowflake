@@ -7,6 +7,39 @@ The pipeline processes Airbnb listings, bookings, and hosts data through a medal
 
 ## 🏗️ Architecture
 
+### Architecture Diagram
+
+The project follows a **Medallion Architecture Pattern** with the following data flow:
+
+```
+AWS S3 Source → STAGING Layer → BRONZE Layer → SILVER Layer → GOLD Layer → Star Schema
+```
+
+**Key Components:**
+
+1. **AWS S3 Source**: Raw CSV files (bookings.csv, hosts.csv, listings.csv)
+2. **STAGING Layer** (AIRBNB.STAGING): Initial data load from S3 into Snowflake
+3. **BRONZE Layer** (AIRBNB.BRONZE): Raw data with incremental loading
+   - `bronze_bookings`, `bronze_hosts`, `bronze_listings`
+4. **SILVER Layer** (AIRBNB.SILVER): Cleaned and validated data
+   - `silver_bookings`, `silver_hosts`, `silver_listings`
+   - Data quality tests applied
+   - Custom macros: multiply(), tag(), trimmer()
+5. **GOLD Layer** (AIRBNB.GOLD): Analytics-ready data
+   - **Metadata-Driven Pipeline**: dbt Jinja config arrays for dynamic SQL generation
+   - **One Big Table (OBT)**: Denormalized fact table joining all Silver tables
+   - **Ephemeral Models**: Intermediate transformations (bookings.sql, hosts.sql, listings.sql)
+   - **Fact Table**: Joins OBT with dimension tables
+   - **Dimension Tables**: Created via dbt snapshots (SCD Type 2)
+     - `dim_hosts`, `dim_listings`, `dim_bookings`
+6. **Star Schema**: Dimensional model output (all components in AIRBNB.GOLD schema)
+   - Fact table (center) connected to dimension tables
+   - SCD Type 2 strategy with timestamp-based tracking
+
+**Overarching Components:**
+- **GitHub**: Version control for dbt models, macros, snapshots, and tests
+- **Security**: Snowflake RBAC, credential management, secure connections
+
 ### Data Flow
 ```
 Source Data (CSV) → AWS S3 → Snowflake (Staging) → Bronze Layer → Silver Layer → Gold Layer
